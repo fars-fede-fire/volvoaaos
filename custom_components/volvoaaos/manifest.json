@@ -1,0 +1,15 @@
+{
+  "domain": "volvoaaos",
+  "name": "Volvo AAOS",
+  "codeowners": [
+    "@fars-fede-fire"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/fars-fede-fire/volvoaaos",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "requirements": [
+    "pydantic>=1.10"
+  ],
+  "version": "0.0.1"
+}
