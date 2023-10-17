@@ -11,7 +11,8 @@ import async_timeout
 from aiohttp.client import ClientSession
 from aiohttp.hdrs import METH_GET, METH_POST
 
-from .models import AuthModel, RechargeModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel
+from .models import AuthModel, RechargeModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, LockModel, UnlockModel
+from .const import LOGGER
 
 
 @dataclass
@@ -180,6 +181,35 @@ class ConnectedVehicle(Volvo):
 
         response = await self._request(url=url, headers=headers)
         return GetDoorModel.parse_obj(response)
+
+    async def lock_car(self):
+        """Lock the car."""
+
+        url = f"https://api.volvocars.com/connected-vehicle/v2/vehicles/{self.vin}/commands/lock"
+
+        headers = {
+            "content-type": self.content_type,
+            "authorization": f"Bearer {self.access_token}",
+            "vcc-api-key": self.vcc_api_key,
+        }
+
+        response = await self._request(url=url, headers=headers, method=METH_POST)
+        return LockModel.parse_obj(response)
+
+    async def unlock_car(self):
+        """Unlock the car."""
+
+        url = f"https://api.volvocars.com/connected-vehicle/v2/vehicles/{self.vin}/commands/unlock"
+
+        headers = {
+            "content-type": self.content_type,
+            "authorization": f"Bearer {self.access_token}",
+            "vcc-api-key": self.vcc_api_key,
+        }
+
+        response = await self._request(url=url, headers=headers, method=METH_POST)
+        return UnlockModel.parse_obj(response)
+
 
     async def  set_climate_start(self):
         """Start climatization"""

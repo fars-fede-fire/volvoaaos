@@ -15,7 +15,7 @@ from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKE
 from .volvo import Auth, Energy, ConnectedVehicle
 from .coordinator import VolvoUpdateCoordinator, VolvoData
 
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.LOCK]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
