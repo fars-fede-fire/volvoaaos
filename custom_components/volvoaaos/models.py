@@ -192,3 +192,30 @@ class StartClimateModel(BaseModel):
     operation_id: str = Field(..., alias='operationId')
     data: StartClimateData
 
+class LockData(BaseModel):
+    vin: str
+    statusCode: int
+    invokeStatus: str
+    message: str
+
+
+class LockModel(BaseModel):
+    status: int
+    operationId: str
+    data: LockData
+
+class UnlockData(BaseModel):
+    vin: str
+    status_code: int = Field(..., alias='statusCode')
+    invoke_status: str = Field(..., alias='invokeStatus')
+    message: str
+    ready_to_unlock: bool = Field(..., alias='readyToUnlock')
+    ready_to_unlock_until: int = Field(..., alias='readyToUnlockUntil')
+
+
+class UnlockModel(BaseModel):
+    status: int
+    operation_id: str = Field(..., alias='operationId')
+    data: UnlockData
+
+

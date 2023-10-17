@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_ACCESS_TOKEN
@@ -54,6 +54,11 @@ class VolvoUpdateCoordinator(DataUpdateCoordinator[VolvoData]):
             update_interval=None,
             update_method=None
         )
+
+    def set_tokens(self):
+        self.connected_vehicle.access_token = self.config_entry.data[CONF_ACCESS_TOKEN]
+        self.connected_vehicle.vcc_api_key = self.config_entry.data[CONF_VCC_API_KEY]
+        self.connected_vehicle.vin = self.config_entry.data[CONF_VIN]
 
     @callback
     async def update_coordinator_data(self, datetime):

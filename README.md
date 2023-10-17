@@ -5,6 +5,8 @@ Home Assistant custom component for Volvo with Android Automotive OS
 
 Alpha release. Expect breaking changes!
 
+Based on: https://www.postman.com/andynash/workspace/volvo-apis/request/6009097-bccdee07-3486-43ea-b805-2099a4539820
+
 
 
 ### Entities
@@ -12,7 +14,7 @@ Alpha release. Expect breaking changes!
 Entity | Type | Description
 -- | -- | --
 `sensor.{name}_battery_level` | Sensor | Battery charged in %
-`binary_sensor_{name}_lock_state` | Binary sensor | Car is locked or unlocked
+`lock_{name}_lock` | Lock | Car is locked or unlocked and service to lock and unlock car
 
 
 ### Services
