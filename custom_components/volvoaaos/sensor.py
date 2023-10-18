@@ -13,7 +13,7 @@ from homeassistant.components.sensor import (
 )
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfEnergy, PERCENTAGE
+from homeassistant.const import UnitOfEnergy, PERCENTAGE, LENGTH_KILOMETERS, TIME_MINUTES
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -45,6 +45,42 @@ SENSORS = [
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=0,
         value_fn=lambda x: x.energy.data.battery_charge_level.value,
+        attr_name=None,
+        attr_fn=None,
+    ),
+    VolvoEntityDescription(
+        key="electric_range",
+        name="Electric range",
+        device_class=SensorDeviceClass.DISTANCE,
+        native_unit_of_measurement=LENGTH_KILOMETERS,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=lambda x: x.energy.data.electric_range.value,
+        attr_name=None,
+        attr_fn=None,
+    ),
+    VolvoEntityDescription(
+        key="estimated_charging_time",
+        name="Estimated Charging Time",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=TIME_MINUTES,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=lambda x: x.energy.data.estimated_charging_time.value,
+        attr_name=None,
+        attr_fn=None,
+    ),
+    VolvoEntityDescription(
+        key="charging_connection_status",
+        name="Charging Connection Status",
+        value_fn=lambda x: x.energy.data.charging_connection_status.value,
+        attr_name=None,
+        attr_fn=None,
+    ),
+    VolvoEntityDescription(
+        key="charging_system_status",
+        name="Charging System Status",
+        value_fn=lambda x: x.energy.data.charging_system_status.value,
         attr_name=None,
         attr_fn=None,
     )
