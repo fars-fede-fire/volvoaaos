@@ -15,7 +15,7 @@ from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKE
 from .volvo import Auth, Energy, ConnectedVehicle
 from .coordinator import VolvoUpdateCoordinator, VolvoData
 
-PLATFORMS = [Platform.SENSOR, Platform.LOCK]
+PLATFORMS = [Platform.SENSOR, Platform.LOCK, Platform.BINARY_SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -59,8 +59,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     connected_vehicle.vin = entry.data[CONF_VIN]
 
     connected_vehicle_door_status_data = await connected_vehicle.get_door_status()
+    connected_vehicle_window_status_data = await connected_vehicle.get_window_status()
 
-    coordinator.async_set_updated_data(VolvoData(energy=energy_data, connected_vehicle_door_status=connected_vehicle_door_status_data))
+    coordinator.async_set_updated_data(VolvoData(energy=energy_data, connected_vehicle_door_status=connected_vehicle_door_status_data, connected_vehicle_window_status=connected_vehicle_window_status_data))
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)

@@ -6,11 +6,11 @@
   ],
   "config_flow": true,
   "documentation": "https://github.com/fars-fede-fire/volvoaaos",
-  "issue_tracker": "https://github.com/fars-fede-fire/volvoaaos/issues",
   "integration_type": "device",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/fars-fede-fire/volvoaaos/issues",
   "requirements": [
     "pydantic>=1.10"
   ],
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

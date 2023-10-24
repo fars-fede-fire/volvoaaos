@@ -13,7 +13,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKEN
 
-from .models import RechargeModel, ConnectedVehicleModel, GetDoorModel
+from .models import RechargeModel, ConnectedVehicleModel, GetDoorModel, GetWindowModel
 from .volvo import Auth, Energy, ConnectedVehicle
 
 @dataclass
@@ -22,6 +22,7 @@ class VolvoData:
 
     energy: RechargeModel
     connected_vehicle_door_status: GetDoorModel
+    connected_vehicle_window_status: GetWindowModel
 
 class VolvoUpdateCoordinator(DataUpdateCoordinator[VolvoData]):
     """Class to manage fetching data for Volvo AAOS."""
@@ -67,7 +68,7 @@ class VolvoUpdateCoordinator(DataUpdateCoordinator[VolvoData]):
         vin = self.config_entry.data[CONF_VIN]
         energy = await update_energy(self.energy, access_token, vcc_api_key, vin)
         connected_vehicle = await update_connected_vehicle(self.connected_vehicle, access_token, vcc_api_key, vin)
-        self.async_set_updated_data(VolvoData(energy=energy, connected_vehicle_door_status=connected_vehicle))
+        self.async_set_updated_data(VolvoData(energy=energy, connected_vehicle_door_status=connected_vehicle['door_status'], connected_vehicle_window_status=connected_vehicle['window_status']))
 
     @callback
     async def update_access_token(self, datetime):
@@ -91,4 +92,6 @@ async def update_connected_vehicle(connected_vehicle: ConnectedVehicle, access_t
     connected_vehicle_call.vcc_api_key = vcc_api_key
     connected_vehicle_call.vin = vin
     door_status = await connected_vehicle_call.get_door_status()
-    return door_status
+    window_status = await connected_vehicle_call.get_window_status()
+
+    return {'door_status': door_status, 'window_status': window_status}
