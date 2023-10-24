@@ -11,7 +11,7 @@ import async_timeout
 from aiohttp.client import ClientSession
 from aiohttp.hdrs import METH_GET, METH_POST
 
-from .models import AuthModel, RechargeModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, LockModel, UnlockModel, GetWindowModel
+from .models import AuthModel, RechargeModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, LockModel, UnlockModel, GetWindowModel, LocationModel
 from .const import LOGGER
 
 
@@ -238,3 +238,25 @@ class ConnectedVehicle(Volvo):
 
         response = await self._request(url=url, headers=headers, method=METH_POST)
         return StartClimateModel.parse_obj(response)
+
+
+class Location(Volvo):
+    """Handling Location API calls"""
+
+    access_token: field(kw_only=True)
+    vcc_api_key: field(kw_only=True)
+    vin: str | None
+    content_type: str = "application/json"
+
+    async def get_location(self):
+        """Get location"""
+
+        url = f"https://api.volvocars.com/location/v1/vehicles/{self.vin}/location"
+        headers = {
+            "content-type": self.content_type,
+            "authorization": f"Bearer {self.access_token}",
+            "vcc-api-key": self.vcc_api_key,
+        }
+
+        response = await self._request(url=url, headers=headers)
+        return LocationModel.parse_obj(response)

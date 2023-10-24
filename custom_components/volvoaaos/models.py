@@ -269,4 +269,23 @@ class UnlockModel(BaseModel):
     operation_id: str = Field(..., alias='operationId')
     data: UnlockData
 
+class Properties(BaseModel):
+    heading: str
+    timestamp: str
 
+
+class Geometry(BaseModel):
+    type: str
+    coordinates: List[float]
+
+
+class LocationData(BaseModel):
+    type: str
+    properties: Properties
+    geometry: Geometry
+
+
+class LocationModel(BaseModel):
+    status: int
+    operationId: str
+    data: LocationData
