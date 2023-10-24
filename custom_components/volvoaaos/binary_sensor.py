@@ -137,7 +137,6 @@ async def async_setup_entry(
     """Setup Volvo binary sensors from config entry."""
 
     volvo_coordinator: VolvoUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    LOGGER.debug(volvo_coordinator.data.connected_vehicle_door_status.data.front_left_door_open)
 
     async_add_entities(
         VolvoBinarySensorEntity(
