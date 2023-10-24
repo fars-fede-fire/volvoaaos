@@ -176,6 +176,57 @@ class GetDoorModel(BaseModel):
     data: DoorData
 
 
+class RearLeftWindowOpen(BaseModel):
+    name: str
+    value: str
+    timestamp: str
+
+
+class RearRightWindowOpen(BaseModel):
+    name: str
+    value: str
+    timestamp: str
+
+
+class FrontLeftWindowOpen(BaseModel):
+    name: str
+    value: str
+    timestamp: str
+
+
+class FrontRightWindowOpen(BaseModel):
+    name: str
+    value: str
+    timestamp: str
+
+
+class SunRoofOpen(BaseModel):
+    name: str
+    value: str
+    timestamp: str
+
+
+class GetWindowData(BaseModel):
+    rear_left_window_open: RearLeftWindowOpen = Field(..., alias='rearLeftWindowOpen')
+    rear_right_window_open: RearRightWindowOpen = Field(
+        ..., alias='rearRightWindowOpen'
+    )
+    front_left_window_open: FrontLeftWindowOpen = Field(
+        ..., alias='frontLeftWindowOpen'
+    )
+    front_right_window_open: FrontRightWindowOpen = Field(
+        ..., alias='frontRightWindowOpen'
+    )
+    sun_roof_open: SunRoofOpen = Field(..., alias='sunRoofOpen')
+
+
+class GetWindowModel(BaseModel):
+    status: int
+    operation_id: str = Field(..., alias='operationId')
+    data: GetWindowData
+
+
+
 class ConnectedVehicleModel(BaseModel):
     door_data: GetDoorModel
 
