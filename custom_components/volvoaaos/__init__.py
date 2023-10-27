@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
-import voluptuous as vol
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, CONF_USERNAME, CONF_ACCESS_TOKEN, CONF_PASSWORD
-from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.util.dt import now
 
@@ -15,7 +12,7 @@ from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKE
 from .volvo import Auth, Energy, ConnectedVehicle, Location
 from .coordinator import VolvoUpdateCoordinator, VolvoData
 
-PLATFORMS = [Platform.SENSOR, Platform.LOCK, Platform.BINARY_SENSOR, Platform.DEVICE_TRACKER]
+PLATFORMS = [Platform.SENSOR, Platform.LOCK, Platform.BINARY_SENSOR, Platform.DEVICE_TRACKER, Platform.BUTTON]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -72,13 +69,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-    async def start_climatization(call: ServiceCall) -> None:
-        """Service call to start climatization"""
-        await connected_vehicle.set_climate_start()
-
-    hass.services.async_register(DOMAIN, SERVICE_START_CLIMATIZATION, start_climatization)
-
 
     return True
 
