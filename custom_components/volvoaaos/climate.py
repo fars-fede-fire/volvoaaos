@@ -3,8 +3,9 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Awaitable
 from dataclasses import dataclass
+from typing import Any
 
 from homeassistant.components.climate import(
     ClimateEntity,
@@ -20,5 +21,13 @@ from .const import DOMAIN, LOGGER
 from .coordinator import VolvoData, VolvoUpdateCoordinator
 
 from .entity import VolvoEntity
+from .volvo import ConnectedVehicle
+
+@dataclass
+class VolvoClimateEntityMixin:
+    """Mixin values for Volvo climate entities."""
+    value_fn: Callable[[VolvoData], float]
+    lock_fn: Callable[[ConnectedVehicle], Awaitable[Any]]
+    unlock_fn: Callable[[ConnectedVehicle], Awaitable[Any]]
 
 

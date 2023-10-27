@@ -243,6 +243,20 @@ class StartClimateModel(BaseModel):
     operation_id: str = Field(..., alias='operationId')
     data: StartClimateData
 
+
+class StopClimateData(BaseModel):
+    vin: str
+    statusCode: int
+    invokeStatus: str
+    message: str
+
+
+class StopClimateModel(BaseModel):
+    status: int
+    operationId: str
+    data: StopClimateData
+
+
 class LockData(BaseModel):
     vin: str
     statusCode: int
