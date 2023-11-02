@@ -129,6 +129,18 @@ class Energy(Volvo):
         response = await self._request(url=url, headers=headers)
         return RechargeModel.parse_obj(response)
 
+    async def get_battery_charge_level(self):
+        url = f"https://api.volvocars.com/energy/v1/vehicles/{self.vin}/recharge-status/battery-charge-level"
+        headers = {
+            "content-type": self.content_type,
+            "authorization": f"Bearer {self.access_token}",
+            "vcc-api-key": self.vcc_api_key,
+        }
+
+        response = await self._request(url=url, headers=headers)
+        return RechargeModel.parse_obj(response)
+
+
 
 @dataclass
 class ConnectedVehicle(Volvo):

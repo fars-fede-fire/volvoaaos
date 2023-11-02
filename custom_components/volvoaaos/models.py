@@ -19,31 +19,31 @@ class AuthModel(BaseModel):
 ### Recharge status ###
 
 class BatteryChargeLevel(BaseModel):
-    value: float
-    unit: str
-    timestamp: str
+    value: float = None
+    unit: str = None
+    timestamp: str = None
 
 
 class ElectricRange(BaseModel):
-    value: str
-    unit: str
-    timestamp: str
+    value: str = None
+    unit: str = None
+    timestamp: str = None
 
 
 class EstimatedChargingTime(BaseModel):
-    value: str
-    unit: str
-    timestamp: str
+    value: str = None
+    unit: str = None
+    timestamp: str = None
 
 
 class ChargingConnectionStatus(BaseModel):
-    value: str
-    timestamp: str
+    value: str = None
+    timestamp: str = None
 
 
 class ChargingSystemStatus(BaseModel):
-    value: str
-    timestamp: str
+    value: str = None
+    timestamp: str = None
 
 class RechargeData(BaseModel):
     battery_charge_level: BatteryChargeLevel = Field(..., alias="batteryChargeLevel")

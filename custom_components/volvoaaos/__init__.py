@@ -50,6 +50,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     energy_data = await energy.get_recharge_status()
 
+    ### Handle issue where all energy data is not available from the API
+
+    if len(energy_data.data) == 0:
+        energy_data = await energy.get_battery_charge_level()
+
     connected_vehicle = ConnectedVehicle(session=session)
     connected_vehicle.access_token = entry.data[CONF_ACCESS_TOKEN]
     connected_vehicle.vcc_api_key = entry.data[CONF_VCC_API_KEY]

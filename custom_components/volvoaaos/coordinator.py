@@ -87,6 +87,11 @@ async def update_energy(energy: Energy, access_token: str, vcc_api_key: str, vin
     energy_call.vcc_api_key = vcc_api_key
     energy_call.vin = vin
     energy_data = await energy_call.get_recharge_status()
+
+    ### Handle issue where all energy data is not available from the API
+    if len(energy_data.data) == 0:
+        energy_data = await energy.get_battery_charge_level()
+
     return energy_data
 
 async def update_connected_vehicle(connected_vehicle: ConnectedVehicle, access_token: str, vcc_api_key: str, vin: str) -> ConnectedVehicleModel:
