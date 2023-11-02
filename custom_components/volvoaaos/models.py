@@ -19,31 +19,33 @@ class AuthModel(BaseModel):
 ### Recharge status ###
 
 class BatteryChargeLevel(BaseModel):
-    value: float = None
-    unit: str = None
-    timestamp: str = None
+    value: float
+    unit: str
+    timestamp: str
 
 
 class ElectricRange(BaseModel):
-    value: str = None
-    unit: str = None
-    timestamp: str = None
+    value: str
+    unit: str
+    timestamp: str
 
 
 class EstimatedChargingTime(BaseModel):
-    value: str = None
-    unit: str = None
-    timestamp: str = None
+    value: str
+    unit: str
+    timestamp: str
 
 
 class ChargingConnectionStatus(BaseModel):
-    value: str = None
-    timestamp: str = None
+    value: str
+    timestamp: str
 
 
 class ChargingSystemStatus(BaseModel):
-    value: str = None
-    timestamp: str = None
+    value: str
+    timestamp: str
+
+
 
 class RechargeData(BaseModel):
     battery_charge_level: BatteryChargeLevel = Field(..., alias="batteryChargeLevel")
@@ -61,8 +63,19 @@ class RechargeData(BaseModel):
 
 class RechargeModel(BaseModel):
     status: int
-    operation_id: str = Field(..., alias="operationId")
+    operation_id: str = Field(..., alias='operationId')
     data: RechargeData
+
+
+class BatteryChargeLevelData(BaseModel):
+    battery_charge_level: BatteryChargeLevel = Field(..., alias='batteryChargeLevel')
+
+
+class BatteryChargeLevelModel(BaseModel):
+    status: int
+    operation_id: str = Field(..., alias='operationId')
+    data: BatteryChargeLevelData
+
 
 
 ### Get VIN ###

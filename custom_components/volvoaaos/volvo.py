@@ -11,7 +11,7 @@ import async_timeout
 from aiohttp.client import ClientSession
 from aiohttp.hdrs import METH_GET, METH_POST
 
-from .models import AuthModel, RechargeModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, StopClimateModel, LockModel, UnlockModel, GetWindowModel, LocationModel
+from .models import AuthModel, RechargeModel, BatteryChargeLevelModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, StopClimateModel, LockModel, UnlockModel, GetWindowModel, LocationModel
 from .const import LOGGER
 
 
@@ -107,14 +107,15 @@ class Auth(Volvo):
         )
         return AuthModel.parse_obj(response)
 
-
+@dataclass
 class Energy(Volvo):
     """Handling Energy API calls"""
 
-    access_token: field(kw_only=True)
-    vcc_api_key: field(kw_only=True)
-    vin: str | None
+    _: KW_ONLY
+    access_token: str = None
+    vcc_api_key: str = None
     content_type: str = "application/json"
+    vin: str = None
 
     async def get_recharge_status(self):
         """Get recharge status"""
@@ -130,6 +131,8 @@ class Energy(Volvo):
         return RechargeModel.parse_obj(response)
 
     async def get_battery_charge_level(self):
+        """Get battery charge state."""
+
         url = f"https://api.volvocars.com/energy/v1/vehicles/{self.vin}/recharge-status/battery-charge-level"
         headers = {
             "content-type": self.content_type,
@@ -138,7 +141,7 @@ class Energy(Volvo):
         }
 
         response = await self._request(url=url, headers=headers)
-        return RechargeModel.parse_obj(response)
+        return BatteryChargeLevelModel.parse_obj(response)
 
 
 
@@ -265,14 +268,15 @@ class ConnectedVehicle(Volvo):
         response = await self._request(url=url, headers=headers, method=METH_POST)
         return StopClimateModel.parse_obj(response)
 
-
+@dataclass
 class Location(Volvo):
     """Handling Location API calls"""
 
-    access_token: field(kw_only=True)
-    vcc_api_key: field(kw_only=True)
-    vin: str | None
+    _: KW_ONLY
+    access_token: str = None
+    vcc_api_key: str = None
     content_type: str = "application/json"
+    vin: str = None
 
     async def get_location(self):
         """Get location"""
