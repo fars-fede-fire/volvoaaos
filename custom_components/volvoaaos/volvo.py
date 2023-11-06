@@ -11,7 +11,7 @@ import async_timeout
 from aiohttp.client import ClientSession
 from aiohttp.hdrs import METH_GET, METH_POST
 
-from .models import AuthModel, RechargeModel, BatteryChargeLevelModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, StopClimateModel, LockModel, UnlockModel, GetWindowModel, LocationModel
+from .models import AuthModel, RechargeModel, BatteryChargeLevelModel, GetVinModel, GetVehicleModel, GetDoorModel, StartClimateModel, StopClimateModel, LockModel, UnlockModel, GetWindowModel, LocationModel, BatteryChargeLevelConnectedVehicleModel
 from .const import LOGGER
 
 
@@ -133,7 +133,7 @@ class Energy(Volvo):
     async def get_battery_charge_level(self):
         """Get battery charge state."""
 
-        url = f"https://api.volvocars.com/energy/v1/vehicles/{self.vin}/recharge-status/battery-charge-level"
+        url = f"https://api.volvocars.com/connected-vehicle/v2/vehicles/{self.vin}/battery-charge-level"
         headers = {
             "content-type": self.content_type,
             "authorization": f"Bearer {self.access_token}",
@@ -141,7 +141,7 @@ class Energy(Volvo):
         }
 
         response = await self._request(url=url, headers=headers)
-        return BatteryChargeLevelModel.parse_obj(response)
+        return BatteryChargeLevelConnectedVehicleModel.parse_obj(response)
 
 
 
