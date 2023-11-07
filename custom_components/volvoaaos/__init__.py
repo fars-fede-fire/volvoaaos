@@ -6,11 +6,10 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, CONF_USERNAME, CONF_ACCESS_TOKEN, CONF_PASSWORD
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.util.dt import now
 
-from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKEN, SERVICE_START_CLIMATIZATION
+from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKEN, CONF_ALL_RECHARGE_AVAILABLE
 from .volvo import Auth, Energy, ConnectedVehicle, Location
-from .coordinator import VolvoUpdateCoordinator, VolvoData
+from .coordinator import VolvoUpdateCoordinator, VolvoData, update_energy
 
 PLATFORMS = [Platform.SENSOR, Platform.LOCK, Platform.BINARY_SENSOR, Platform.DEVICE_TRACKER, Platform.BUTTON]
 
@@ -41,28 +40,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             LOGGER.debug(e)
             LOGGER.debug('Could not login. Try reinstall the component.')
 
+    energy = Energy(session=session, access_token=entry.data[CONF_ACCESS_TOKEN], vcc_api_key=entry.data[CONF_VCC_API_KEY], vin=entry.data[CONF_VIN])
+    energy_data = await update_energy(energy=energy, all_recharge_available=entry.data[CONF_ALL_RECHARGE_AVAILABLE])
 
-
-    energy = Energy(session=session)
-    energy.access_token = entry.data[CONF_ACCESS_TOKEN]
-    energy.vcc_api_key = entry.data[CONF_VCC_API_KEY]
-    energy.vin = entry.data[CONF_VIN]
-
-    energy_data = await energy.get_recharge_status()
-
-    connected_vehicle = ConnectedVehicle(session=session)
-    connected_vehicle.access_token = entry.data[CONF_ACCESS_TOKEN]
-    connected_vehicle.vcc_api_key = entry.data[CONF_VCC_API_KEY]
-    connected_vehicle.vin = entry.data[CONF_VIN]
-
+    connected_vehicle = ConnectedVehicle(session=session, access_token=entry.data[CONF_ACCESS_TOKEN], vcc_api_key=entry.data[CONF_VCC_API_KEY], vin=entry.data[CONF_VIN])
     connected_vehicle_door_status_data = await connected_vehicle.get_door_status()
     connected_vehicle_window_status_data = await connected_vehicle.get_window_status()
 
-    location = Location(session=session)
-    location.access_token = entry.data[CONF_ACCESS_TOKEN]
-    location.vcc_api_key = entry.data[CONF_VCC_API_KEY]
-    location.vin = entry.data[CONF_VIN]
-
+    location = Location(session=session, access_token=entry.data[CONF_ACCESS_TOKEN], vcc_api_key=entry.data[CONF_VCC_API_KEY], vin=entry.data[CONF_VIN])
     location_data = await location.get_location()
 
     coordinator.async_set_updated_data(VolvoData(energy=energy_data, connected_vehicle_door_status=connected_vehicle_door_status_data, connected_vehicle_window_status=connected_vehicle_window_status_data, location=location_data))

@@ -11,9 +11,9 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_track_time_interval
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKEN
+from .const import DOMAIN, LOGGER, CONF_VCC_API_KEY, CONF_VIN, CONF_REFRESH_TOKEN, CONF_ALL_RECHARGE_AVAILABLE
 
-from .models import RechargeModel, ConnectedVehicleModel, GetDoorModel, GetWindowModel, LocationModel
+from .models import RechargeModel, ConnectedVehicleModel, GetDoorModel, GetWindowModel, LocationModel, BatteryChargeLevelModel
 from .volvo import Auth, Energy, ConnectedVehicle, Location
 
 @dataclass
@@ -59,19 +59,23 @@ class VolvoUpdateCoordinator(DataUpdateCoordinator[VolvoData]):
         )
 
     def set_tokens(self):
+        self.energy.access_token = self.config_entry.data[CONF_ACCESS_TOKEN]
+        self.energy.vcc_api_key = self.config_entry.data[CONF_VCC_API_KEY]
+        self.energy.vin = self.config_entry.data[CONF_VIN]
         self.connected_vehicle.access_token = self.config_entry.data[CONF_ACCESS_TOKEN]
         self.connected_vehicle.vcc_api_key = self.config_entry.data[CONF_VCC_API_KEY]
         self.connected_vehicle.vin = self.config_entry.data[CONF_VIN]
+        self.location.access_token = self.config_entry.data[CONF_ACCESS_TOKEN]
+        self.location.vcc_api_key = self.config_entry.data[CONF_VCC_API_KEY]
+        self.location.vin = self.config_entry.data[CONF_VIN]
 
     @callback
     async def update_coordinator_data(self, datetime):
-        access_token = self.config_entry.data[CONF_ACCESS_TOKEN]
-        vcc_api_key = self.config_entry.data[CONF_VCC_API_KEY]
-        vin = self.config_entry.data[CONF_VIN]
-        energy = await update_energy(self.energy, access_token, vcc_api_key, vin)
-        connected_vehicle = await update_connected_vehicle(self.connected_vehicle, access_token, vcc_api_key, vin)
-        location = await update_location(self.location, access_token, vcc_api_key, vin)
-        self.async_set_updated_data(VolvoData(energy=energy, connected_vehicle_door_status=connected_vehicle['door_status'], connected_vehicle_window_status=connected_vehicle['window_status'], location=location))
+        self.set_tokens()
+        energy_data = await update_energy(energy=self.energy, all_recharge_available=self.config_entry.data[CONF_ALL_RECHARGE_AVAILABLE])
+        connected_vehicle = await update_connected_vehicle(self.connected_vehicle)
+        location = await update_location(self.location)
+        self.async_set_updated_data(VolvoData(energy=energy_data, connected_vehicle_door_status=connected_vehicle['door_status'], connected_vehicle_window_status=connected_vehicle['window_status'], location=location))
 
     @callback
     async def update_access_token(self, datetime):
@@ -81,28 +85,23 @@ class VolvoUpdateCoordinator(DataUpdateCoordinator[VolvoData]):
         LOGGER.debug("Access and refresh token updated")
 
 
-async def update_energy(energy: Energy, access_token: str, vcc_api_key: str, vin: str) -> RechargeModel:
+async def update_energy(energy: Energy, all_recharge_available: bool) -> RechargeModel | BatteryChargeLevelModel:
     energy_call = energy
-    energy_call.access_token = access_token
-    energy_call.vcc_api_key = vcc_api_key
-    energy_call.vin = vin
-    energy_data = await energy_call.get_recharge_status()
+    if all_recharge_available is True:
+        energy_data = await energy_call.get_recharge_status()
+    else:
+        energy_data = await energy_call.get_battery_charge_level()
+
     return energy_data
 
-async def update_connected_vehicle(connected_vehicle: ConnectedVehicle, access_token: str, vcc_api_key: str, vin: str) -> ConnectedVehicleModel:
+async def update_connected_vehicle(connected_vehicle: ConnectedVehicle) -> ConnectedVehicleModel:
     connected_vehicle_call = connected_vehicle
-    connected_vehicle_call.access_token = access_token
-    connected_vehicle_call.vcc_api_key = vcc_api_key
-    connected_vehicle_call.vin = vin
     door_status = await connected_vehicle_call.get_door_status()
     window_status = await connected_vehicle_call.get_window_status()
 
     return {'door_status': door_status, 'window_status': window_status}
 
-async def update_location(location: Location, access_token: str, vcc_api_key: str, vin: str) -> LocationModel:
+async def update_location(location: Location) -> LocationModel:
     location_call = location
-    location_call.access_token = access_token
-    location_call.vcc_api_key = vcc_api_key
-    location_call.vin = vin
     location_data = await location_call.get_location()
     return location_data

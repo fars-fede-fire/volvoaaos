@@ -11,9 +11,9 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers import selector
 
-from .const import DOMAIN, LOGGER, CONF_VIN, CONF_REFRESH_TOKEN, CONF_VCC_API_KEY
+from .const import DOMAIN, LOGGER, CONF_VIN, CONF_REFRESH_TOKEN, CONF_VCC_API_KEY, CONF_ALL_RECHARGE_AVAILABLE
 
-from .volvo import Auth, ConnectedVehicle
+from .volvo import Auth, ConnectedVehicle, Energy
 
 SETUP_SCHEMA = vol.Schema(
     {
@@ -44,6 +44,7 @@ class VolvoaaosConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     refresh_token: str = None
     vin: str = None
     name: str = None
+    all_recharge_available: bool = None
 
     def __init__(self) -> None:
         """Initialize Volvo AAOS flow."""
@@ -120,6 +121,20 @@ class VolvoaaosConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self.name = user_input[CONF_NAME]
 
+            session = async_get_clientsession(self.hass)
+            energy = Energy(session=session, access_token=self.access_token, vcc_api_key=self.vcc_api_key, vin=self.vin)
+
+            try:
+                response = await energy.get_recharge_status()
+                self.all_recharge_available = True
+                LOGGER.debug(response)
+                LOGGER.debug('All recharge status endpoints is available')
+            except Exception as e:
+                self.all_recharge_available = False
+                LOGGER.debug('Can NOT get all recharge endpoints. Battery percentage is available')
+                LOGGER.debug(e)
+
+
             data = {
                 CONF_USERNAME: self.username,
                 CONF_PASSWORD: self.password,
@@ -127,7 +142,8 @@ class VolvoaaosConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 CONF_ACCESS_TOKEN: self.access_token,
                 CONF_REFRESH_TOKEN: self.refresh_token,
                 CONF_VIN:self.vin,
-                CONF_NAME: self.name
+                CONF_NAME: self.name,
+                CONF_ALL_RECHARGE_AVAILABLE: self.all_recharge_available
             }
 
             await self.async_set_unique_id(self.vin)

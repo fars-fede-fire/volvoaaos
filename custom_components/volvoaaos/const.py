@@ -12,8 +12,7 @@ LOGGER = logging.getLogger(__package__)
 CONF_VCC_API_KEY = "vcc_api_key"
 CONF_VIN = "vin"
 CONF_REFRESH_TOKEN = "refresh_token"
-
-SERVICE_START_CLIMATIZATION = "start_climatization"
+CONF_ALL_RECHARGE_AVAILABLE = "all_recharge_available"
 
 
 ### Volvo constants ###

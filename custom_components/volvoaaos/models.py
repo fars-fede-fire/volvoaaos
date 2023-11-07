@@ -45,6 +45,9 @@ class ChargingSystemStatus(BaseModel):
     value: str
     timestamp: str
 
+
+
+
 class RechargeData(BaseModel):
     battery_charge_level: BatteryChargeLevel = Field(..., alias="batteryChargeLevel")
     electric_range: ElectricRange = Field(..., alias="electricRange")
@@ -61,8 +64,36 @@ class RechargeData(BaseModel):
 
 class RechargeModel(BaseModel):
     status: int
-    operation_id: str = Field(..., alias="operationId")
+    operation_id: str = Field(..., alias='operationId')
     data: RechargeData
+
+
+class BatteryChargeLevelData(BaseModel):
+    battery_charge_level: BatteryChargeLevel = Field(..., alias='batteryChargeLevel')
+
+
+class BatteryChargeLevelModel(BaseModel):
+    status: int
+    operation_id: str = Field(..., alias='operationId')
+    data: BatteryChargeLevelData
+
+
+class BatteryChargeLevelConnectedVehicle(BaseModel):
+    name: str
+    value: str
+    unit: str
+    timestamp: str
+
+
+class BatteryChargeLevelConnectedVehicleData(BaseModel):
+    battery_charge_level: BatteryChargeLevelConnectedVehicle = Field(..., alias='batteryChargeLevel')
+
+
+class BatteryChargeLevelConnectedVehicleModel(BaseModel):
+    status: int
+    operation_id: str = Field(..., alias='operationId')
+    data: BatteryChargeLevelConnectedVehicleData
+
 
 
 ### Get VIN ###
