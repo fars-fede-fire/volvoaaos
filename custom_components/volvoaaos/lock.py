@@ -37,7 +37,7 @@ LOCKS = [
     VolvoLockEntityDescription(
         key="lock",
         name="Lock",
-        value_fn=lambda x: True if x.connected_vehicle_door_status.data.car_locked.value == 'LOCKED' else False,
+        value_fn=lambda x: True if x.connected_vehicle_door_status.data.central_lock.value == 'LOCKED' else False,
         lock_fn=lambda client: client.lock_car(),
         unlock_fn=lambda client: client.unlock_car(),
     )

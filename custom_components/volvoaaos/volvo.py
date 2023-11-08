@@ -133,9 +133,9 @@ class Energy(Volvo):
     async def get_battery_charge_level(self):
         """Get battery charge state."""
 
-        url = f"https://api.volvocars.com/connected-vehicle/v2/vehicles/{self.vin}/battery-charge-level"
+        url = f"https://api.volvocars.com/connected-vehicle/v1/vehicles/{self.vin}/battery-charge-level"
         headers = {
-            "content-type": self.content_type,
+            "content-type": 'application/vnd.volvocars.api.connected-vehicle.vehicledata.v1+json',
             "authorization": f"Bearer {self.access_token}",
             "vcc-api-key": self.vcc_api_key,
         }
