@@ -38,7 +38,7 @@ BINARY_SENSORS = [
         key="front_left_door",
         name="Front left door",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.front_left_door_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.front_left_door.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -46,7 +46,7 @@ BINARY_SENSORS = [
         key="front_right_door",
         name="Front right door",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.front_right_door_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.front_right_door.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -54,7 +54,7 @@ BINARY_SENSORS = [
         key="rear_left_door",
         name="Rear left door",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.rear_left_door_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.rear_left_door.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -62,7 +62,7 @@ BINARY_SENSORS = [
         key="rear_right_door",
         name="Rear right door",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.rear_right_door_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.rear_right_door.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -70,7 +70,7 @@ BINARY_SENSORS = [
         key="hood",
         name="Hood",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.hood_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.hood.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -78,7 +78,7 @@ BINARY_SENSORS = [
         key="tail_gate",
         name="Tail gate",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.tail_gate_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.tailgate.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -86,7 +86,7 @@ BINARY_SENSORS = [
         key="tank_lid",
         name="Tank lid",
         device_class=BinarySensorDeviceClass.DOOR,
-        value_fn=lambda x: False if x.connected_vehicle_door_status.data.tank_lid_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_door_status.data.tank_lid.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -94,7 +94,7 @@ BINARY_SENSORS = [
         key="front_left_window",
         name="Front left window",
         device_class=BinarySensorDeviceClass.WINDOW,
-        value_fn=lambda x: False if x.connected_vehicle_window_status.data.front_left_window_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_window_status.data.front_left_window.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -102,7 +102,7 @@ BINARY_SENSORS = [
         key="front_right_window",
         name="Front right window",
         device_class=BinarySensorDeviceClass.WINDOW,
-        value_fn=lambda x: False if x.connected_vehicle_window_status.data.front_right_window_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_window_status.data.front_right_window.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -110,7 +110,7 @@ BINARY_SENSORS = [
         key="rear_left_window",
         name="Rear left window",
         device_class=BinarySensorDeviceClass.WINDOW,
-        value_fn=lambda x: False if x.connected_vehicle_window_status.data.rear_left_window_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_window_status.data.rear_left_window.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -118,7 +118,7 @@ BINARY_SENSORS = [
         key="rear_right_window",
         name="Rear right window",
         device_class=BinarySensorDeviceClass.WINDOW,
-        value_fn=lambda x: False if x.connected_vehicle_window_status.data.rear_right_window_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_window_status.data.rear_right_window.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),
@@ -126,7 +126,7 @@ BINARY_SENSORS = [
         key="sunroof",
         name="Sunroof",
         device_class=BinarySensorDeviceClass.WINDOW,
-        value_fn=lambda x: False if x.connected_vehicle_window_status.data.sun_roof_open.value == 'CLOSED' else True,
+        value_fn=lambda x: False if x.connected_vehicle_window_status.data.sunroof.value == 'CLOSED' else True,
         attr_name=None,
         attr_fn=None
     ),

@@ -79,7 +79,6 @@ class BatteryChargeLevelModel(BaseModel):
 
 
 class BatteryChargeLevelConnectedVehicle(BaseModel):
-    name: str
     value: str
     unit: str
     timestamp: str
@@ -104,11 +103,10 @@ class VinList(BaseModel):
 class Pagination(BaseModel):
     limit: int
     total: int
+    offset: int
 
 
 class GetVinModel(BaseModel):
-    status: int
-    operation_id: str = Field(..., alias='operationId')
     data: List[VinList]
     pagination: Pagination
 
@@ -142,118 +140,95 @@ class GetVehicleModel(BaseModel):
 
 ### Get door status ###
 
-class CarLocked(BaseModel):
-    name: str
+class CentralLock(BaseModel):
     value: str
     timestamp: str
 
 
-class FrontLeftDoorOpen(BaseModel):
-    name: str
+class FrontLeftDoor(BaseModel):
     value: str
     timestamp: str
 
 
-class FrontRightDoorOpen(BaseModel):
-    name: str
+class FrontRightDoor(BaseModel):
     value: str
     timestamp: str
 
 
-class RearLeftDoorOpen(BaseModel):
-    name: str
+class RearLeftDoor(BaseModel):
     value: str
     timestamp: str
 
 
-class RearRightDoorOpen(BaseModel):
-    name: str
+class RearRightDoor(BaseModel):
     value: str
     timestamp: str
 
 
-class HoodOpen(BaseModel):
-    name: str
+class Hood(BaseModel):
     value: str
     timestamp: str
 
 
-class TailGateOpen(BaseModel):
-    name: str
+class Tailgate(BaseModel):
     value: str
     timestamp: str
 
 
-class TankLidOpen(BaseModel):
-    name: str
+class TankLid(BaseModel):
     value: str
     timestamp: str
 
 
 class DoorData(BaseModel):
-    car_locked: CarLocked = Field(..., alias='carLocked')
-    front_left_door_open: FrontLeftDoorOpen = Field(..., alias='frontLeftDoorOpen')
-    front_right_door_open: FrontRightDoorOpen = Field(..., alias='frontRightDoorOpen')
-    rear_left_door_open: RearLeftDoorOpen = Field(..., alias='rearLeftDoorOpen')
-    rear_right_door_open: RearRightDoorOpen = Field(..., alias='rearRightDoorOpen')
-    hood_open: HoodOpen = Field(..., alias='hoodOpen')
-    tail_gate_open: TailGateOpen = Field(..., alias='tailGateOpen')
-    tank_lid_open: TankLidOpen = Field(..., alias='tankLidOpen')
+    central_lock: CentralLock = Field(..., alias='centralLock')
+    front_left_door: FrontLeftDoor = Field(..., alias='frontLeftDoor')
+    front_right_door: FrontRightDoor = Field(..., alias='frontRightDoor')
+    rear_left_door: RearLeftDoor = Field(..., alias='rearLeftDoor')
+    rear_right_door: RearRightDoor = Field(..., alias='rearRightDoor')
+    hood: Hood
+    tailgate: Tailgate
+    tank_lid: TankLid = Field(..., alias='tankLid')
 
 
 class GetDoorModel(BaseModel):
-    status: int
-    operation_id: str = Field(..., alias='operationId')
     data: DoorData
 
 
-class RearLeftWindowOpen(BaseModel):
-    name: str
+class FrontLeftWindow(BaseModel):
     value: str
     timestamp: str
 
 
-class RearRightWindowOpen(BaseModel):
-    name: str
+class FrontRightWindow(BaseModel):
     value: str
     timestamp: str
 
 
-class FrontLeftWindowOpen(BaseModel):
-    name: str
+class RearLeftWindow(BaseModel):
     value: str
     timestamp: str
 
 
-class FrontRightWindowOpen(BaseModel):
-    name: str
+class RearRightWindow(BaseModel):
     value: str
     timestamp: str
 
 
-class SunRoofOpen(BaseModel):
-    name: str
+class Sunroof(BaseModel):
     value: str
     timestamp: str
 
 
 class GetWindowData(BaseModel):
-    rear_left_window_open: RearLeftWindowOpen = Field(..., alias='rearLeftWindowOpen')
-    rear_right_window_open: RearRightWindowOpen = Field(
-        ..., alias='rearRightWindowOpen'
-    )
-    front_left_window_open: FrontLeftWindowOpen = Field(
-        ..., alias='frontLeftWindowOpen'
-    )
-    front_right_window_open: FrontRightWindowOpen = Field(
-        ..., alias='frontRightWindowOpen'
-    )
-    sun_roof_open: SunRoofOpen = Field(..., alias='sunRoofOpen')
+    front_left_window: FrontLeftWindow = Field(..., alias='frontLeftWindow')
+    front_right_window: FrontRightWindow = Field(..., alias='frontRightWindow')
+    rear_left_window: RearLeftWindow = Field(..., alias='rearLeftWindow')
+    rear_right_window: RearRightWindow = Field(..., alias='rearRightWindow')
+    sunroof: Sunroof
 
 
 class GetWindowModel(BaseModel):
-    status: int
-    operation_id: str = Field(..., alias='operationId')
     data: GetWindowData
 
 
@@ -264,45 +239,35 @@ class ConnectedVehicleModel(BaseModel):
 
 class StartClimateData(BaseModel):
     vin: str
-    status_code: int = Field(..., alias='statusCode')
     invoke_status: str = Field(..., alias='invokeStatus')
     message: str
 
 
 class StartClimateModel(BaseModel):
-    status: int
-    operation_id: str = Field(..., alias='operationId')
     data: StartClimateData
 
 
 class StopClimateData(BaseModel):
     vin: str
-    statusCode: int
     invokeStatus: str
     message: str
 
 
 class StopClimateModel(BaseModel):
-    status: int
-    operationId: str
     data: StopClimateData
 
 
 class LockData(BaseModel):
     vin: str
-    statusCode: int
     invokeStatus: str
     message: str
 
 
 class LockModel(BaseModel):
-    status: int
-    operationId: str
     data: LockData
 
 class UnlockData(BaseModel):
     vin: str
-    status_code: int = Field(..., alias='statusCode')
     invoke_status: str = Field(..., alias='invokeStatus')
     message: str
     ready_to_unlock: bool = Field(..., alias='readyToUnlock')
@@ -310,8 +275,6 @@ class UnlockData(BaseModel):
 
 
 class UnlockModel(BaseModel):
-    status: int
-    operation_id: str = Field(..., alias='operationId')
     data: UnlockData
 
 class Properties(BaseModel):
