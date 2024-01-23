@@ -108,7 +108,6 @@ class Pagination(BaseModel):
 
 class GetVinModel(BaseModel):
     data: List[VinList]
-    pagination: Pagination
 
 ### Get vehicle data ###
 
